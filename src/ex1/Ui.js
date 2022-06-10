@@ -2,7 +2,7 @@ class Ui {
     constructor() {
         this.tasksCompleted = document.getElementById('completed-tasks');
         this.listGif = document.getElementById('list-gif');
-        this.imInstance = new ItemManager();
+        this.ItemManager = new ItemManager();
         document.querySelector('form').addEventListener('submit', this.submitButtonHandler.bind(this));
         document.getElementById('clear-all').addEventListener('click', this.clearAllHandler.bind(this));
         document.querySelector('ul').addEventListener('click', this.alertMessage.bind(this));
@@ -15,7 +15,7 @@ class Ui {
         this.listGif.style.display = "none";
         if (newTaskInput.value !== '') {
             this.tasksCompleted.style.display = "flex";
-            await this.imInstance.addTask(newTaskInput.value);
+            await this.ItemManager.addTask(newTaskInput.value);
             newTaskInput.value = ''; //After inserting a new task, the new task input area will be initialized to an empty string
         }
         this.renderTodo();
@@ -23,11 +23,8 @@ class Ui {
 
     renderTodo() {
         const ul = document.querySelector('ul');
-        //Prevents duplicates of already inserted todos
-        while (ul.hasChildNodes()) {
-            ul.removeChild(ul.firstChild);
-        }
-        this.imInstance.todoList.forEach(element => {
+        this.duplicateListItemRemover(ul);
+        this.ItemManager.todoList.forEach(element => {
             const li = document.createElement('li'); //Creating a new 'li' element which refers to a new task that has been submitted
             //When the task os marked as done, the line through style will be implemented
             if(element.done){
@@ -45,7 +42,7 @@ class Ui {
             document.querySelector(`[item="${element.id}"]`).addEventListener('click', this.deleteTodo.bind(this));
         });
         //If the the array is empty, then display a gif
-        if(this.imInstance.todoList.length === 0){
+        if(this.ItemManager.todoList.length === 0){
             this.tasksCompleted.style.display = "none";
             this.listGif.style.display = "block";
         }
@@ -55,23 +52,23 @@ class Ui {
 
     /*** Task Done Checkbox ***/
     checkTodo(event) {
-        let item = event.target;
+        const item = event.target;
         //If the checkbox is mark as done, set the array's done attribute to true, else set it to false 
-        item.checked ? this.imInstance.setDone(event.target.id) : this.imInstance.setUnDone(event.target.id);
+        item.checked ? this.ItemManager.setDone(event.target.id) : this.ItemManager.setUnDone(event.target.id);
         this.renderTodo();
     }
 
 
     /*** Delete Button ***/
     deleteTodo(event) {
-        this.imInstance.removeTask(event.target.getAttribute("item"));
+        this.ItemManager.removeTask(event.target.getAttribute("item"));
         this.renderTodo();
     }
 
 
     /*** Clear All Button ***/
     clearAllHandler(event) {
-        this.imInstance.clear();
+        this.ItemManager.clear();
         this.renderTodo();
     }
 
@@ -86,6 +83,12 @@ class Ui {
 
     //"You have completed 0 / 1 tasks" function
     taskCompletePhrase() {
-        this.tasksCompleted.innerText = `You have completed ${this.imInstance.doneTasks} / ${this.imInstance.todoList.length} tasks`;
+        this.tasksCompleted.innerText = `You have completed ${this.ItemManager.doneTasks} / ${this.ItemManager.todoList.length} tasks`;
+    }
+
+    duplicateListItemRemover(ul){
+        while (ul.hasChildNodes()) {
+            ul.removeChild(ul.firstChild);
+        }
     }
 }

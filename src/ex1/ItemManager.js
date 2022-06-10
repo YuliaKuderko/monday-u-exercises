@@ -1,18 +1,20 @@
 class ItemManager{
     constructor(element) {
         this.todoList = [];
-        this.pcInstance = new PokemonClient();
+        this.PokemonClient = new PokemonClient();
     }
 
     async addTask(itemText){
         let itemTexts = [];
+        const split = itemText.split(`,`);
+        let id = (Math.random() + 1).toString(36).substring(7);
         //If the input includes string, parse it to integer, and fetch its pokemon id 
         if(parseInt(itemText)){
-            itemTexts = await this.pcInstance.fetchPokemon([parseInt(itemText)]);
+            itemTexts = await this.PokemonClient.fetchPokemon([parseInt(itemText)]);
         }
         //If the input has more than 1 string, split it into an array, fetch the input and create an array with parsed integers which are the pokemons' ids
-        if(itemText.split(`,`).length > 1){
-            itemTexts = await this.pcInstance.fetchPokemon(itemText.split(`,`).map(id => parseInt(id)));
+        if(split.length > 1){
+            itemTexts = await this.PokemonClient.fetchPokemon(split.map(id => parseInt(id)));
         }
         //If the array's empty, then push the string into the array and print the string that was inserted
         if(itemTexts.length === 0){
@@ -20,7 +22,7 @@ class ItemManager{
         }
         //For each element in the itemTexts array, push its value into the main array (todoList), allocate an id to it and set its done attribute to false  
         itemTexts.forEach(item => {
-            this.todoList.push({value:item, id: (Math.random() + 1).toString(36).substring(7), done: false});
+            this.todoList.push({value:item, id, done: false});
         })
     }
 
@@ -50,7 +52,7 @@ class ItemManager{
 
     //Getting the amount of done tasks
     get doneTasks(){
-       return this.todoList.filter(item => { return item.done}).length;
+       return this.todoList.filter(item => item.done).length;
     }
 
     //Empties the array
