@@ -1,3 +1,5 @@
+import fetch from 'node-fetch';
+
 class PokemonClient{
     constructor() {
         this.targetURL = 'https://pokeapi.co/api/v2/pokemon/';
@@ -19,3 +21,5 @@ class PokemonClient{
         })
     }
 }
+
+export default PokemonClient;
