@@ -4,7 +4,8 @@ const filename='./data.json';
 
 class ItemManager{
     constructor(element) {
-        this.todoList = [];
+        this.todoList = new Map;
+        this.lastId = 0
         this.load();
         this.PokemonClient = new PokemonClient();
     }
@@ -12,6 +13,7 @@ class ItemManager{
     load(){  
         const data = fs.readFileSync(filename, {encoding:'utf8', flag:'r'});
         this.todoList = JSON.parse(data);
+        this.lastId = Math.max(...this.todoList.keys())
     }
 
     store(){  
@@ -32,30 +34,22 @@ class ItemManager{
             itemTexts.push(itemText);
         }
         itemTexts.forEach(item => {
-            this.todoList.push({value:item, done: false});
+            this.todoList.set(++this.lastId,{value:item, done: false});
         })
         this.store();
     }
 
     removeTask(id) {
-        this.todoList.splice(id, 1);
+        this.todoList.delete(id);
         this.store();
     }
 
     setDone(id){
-        this.todoList.forEach(item => {
-            if (item.id === id){
-                item.done = true;
-            }
-        })
+        this.todoList[id].done = true;
     }
 
     setUnDone(id){
-        this.todoList.forEach(item => {
-            if (item.id === id){
-                item.done = false;
-            }
-        })
+        this.todoList[id].done = false;
     }
 
     
@@ -65,7 +59,7 @@ class ItemManager{
 
 
     clear(){
-        this.todoList = [];
+        this.todoList = new Map;
         this.store();
     }
 }
