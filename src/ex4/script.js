@@ -1,3 +1,5 @@
+/********* Related to homework #1  *********/
+
 document.querySelector('form').addEventListener('submit', submitButtonHandler);
 document.querySelector('ul').addEventListener('click', checkHandler);
 document.querySelector('ul').addEventListener('click', deleteHandler);
