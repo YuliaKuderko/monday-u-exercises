@@ -9,7 +9,6 @@ class Ui {
         this.renderTodo();
     }
 
-    /*** Submit Button Handler ***/
     async submitButtonHandler(event) {
         event.preventDefault(); 
         const newTaskInput = document.querySelector('#new-task');
@@ -51,7 +50,6 @@ class Ui {
     }
 
 
-    /*** Task Done Checkbox ***/
     async checkTodo(event) {
         const item = event.target;
         item.checked ? await this.RemoteItemManager.setDone(event.target.id) : await this.RemoteItemManager.setUnDone(event.target.id);
@@ -59,21 +57,17 @@ class Ui {
     }
 
 
-    /*** Delete Button ***/
     async deleteTodo(event) {
         await this.RemoteItemManager.deleteItem(event.target.getAttribute("item"));
         this.renderTodo();
     }
 
-
-    /*** Clear All Button ***/
     async clearAllHandler(event) {
         await this.RemoteItemManager.clearAll();
         this.renderTodo();
     }
 
 
-    /*** List Item Clicked ***/
     alertMessage(event) {
         if (event.target.name !== 'task-complete' && event.target.name !== 'deleteButton') {
             alert(event.target.innerText);
@@ -81,7 +75,6 @@ class Ui {
     }
 
 
-    //"You have completed 0 / 1 tasks" function
     taskCompletePhrase(items) {
         this.tasksCompleted.innerText = `You have completed ${items.filter(e => e.done).length} / ${items.length} tasks`;
     }
