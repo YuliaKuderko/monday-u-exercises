@@ -1,14 +1,12 @@
 import PokemonClient from "./PokemonClient.js";
-import item from "./models/item.js"
-const filename = './data.json';
-
+import item from "./models/item.js";
 class ItemManager {
     constructor(element) {
         this.PokemonClient = new PokemonClient();
     }
 
-    getItems() {
-        return this.todoList;
+    async getItems() {
+        return await item.findAll();
     }
 
     async addTask(itemText) {
@@ -25,7 +23,7 @@ class ItemManager {
             itemTexts.push(itemText);
         }
         itemTexts.forEach(item => {
-            ++this.lastID
+            ++this.lastID;
             this.todoList[this.lastID] = { value: item, done: false, id: this.lastID };
         })
         this.store();
