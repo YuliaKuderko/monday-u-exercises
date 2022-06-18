@@ -1,4 +1,4 @@
-import fetch from 'node-fetch';
+import axios from 'axios'
 
 class PokemonClient{
     constructor() {
@@ -9,8 +9,8 @@ class PokemonClient{
         let requests = [];
         idArray.forEach(id => {
             requests.push(
-                fetch(this.targetURL + `${id}`)
-                .then(resp => resp.json())
+                axios.get(this.targetURL + `${id}`)
+                .then(res => res.data)
                 .catch(err => new Promise((resolve) => {
                     resolve({id: id});
             })))

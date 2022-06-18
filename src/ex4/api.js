@@ -1,19 +1,36 @@
+import app from './server.js';
 import bodyParser from 'body-parser';
+import ItemManager from './ItemManager.js';
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.get("", (req, res) => {
-   res.render('index')
-})
-app.post("/pokemon", (req,res) => {
-     res.status(200).json({message: "Error"});
- })
+const itemManager = new ItemManager();
 
- app.post("/pokemon/:id", (req, res) => {
-    const pokemon = todoList.find((value) => value.id === pokemon.id);
-    if(!pokemon) return res.status(404).json({
-      status: 404,
-      error: "Pokemon with given id not found"
-    });
-    res.send(req.bod)
-    res.status(200).json(pokemon);
- })
+app.post("/add", (req,res) => {
+   itemManager.addTask(req.body.title)
+   .then(() => res.json(itemManager.getItems()))
+ });
+
+ app.get("/get", (req, res) => {
+   res.status(200).json(itemManager.getItems());
+});
+
+app.patch('/done/:id', (req, res) => {
+   itemManager.setDone(req.params.id);
+   res.json(itemManager.getItems());
+ });
+
+ app.patch('/undone/:id', (req, res) => {
+   itemManager.setUnDone(req.params.id);
+   res.json(itemManager.getItems());
+ });
+
+ app.delete('/delete/:id', (req, res) => {
+   itemManager.removeTask(req.params.id);
+   res.json(itemManager.getItems());
+ });
+
+ app.delete('/delete_all_items', (req, res) => {
+   itemManager.clear();
+   res.json(itemManager.getItems());
+ });

@@ -1,65 +1,70 @@
 import PokemonClient from "./PokemonClient.js";
 import fs from 'fs';
-const filename='./data.json';
+const filename = './data.json';
 
-class ItemManager{
+class ItemManager {
     constructor(element) {
-        this.todoList = new Map;
-        this.lastId = 0
         this.load();
         this.PokemonClient = new PokemonClient();
     }
 
-    load(){  
-        const data = fs.readFileSync(filename, {encoding:'utf8', flag:'r'});
+    load() {
+        const data = fs.readFileSync(filename, { encoding: 'utf8', flag: 'r' });
         this.todoList = JSON.parse(data);
-        this.lastId = Math.max(...this.todoList.keys())
+        if (this.todoList.length === 0) {
+            this.lastID = 0;
+            return;
+        }
+        this.lastID = Math.max(...Object.keys(this.todoList), 0);
     }
 
-    store(){  
+    store() {
         fs.writeFileSync(filename, JSON.stringify(this.todoList));
     }
 
-    async addTask(itemText){
+    getItems() {
+        return this.todoList;
+    }
+
+    async addTask(itemText) {
         let itemTexts = [];
         const split = itemText.split(`,`);
-        
-        if(parseInt(itemText)){
+
+        if (parseInt(itemText)) {
             itemTexts = await this.PokemonClient.fetchPokemon([parseInt(itemText)]);
         }
-        if(split.length > 1){
+        if (split.length > 1) {
             itemTexts = await this.PokemonClient.fetchPokemon(split.map(id => parseInt(id)));
         }
-        if(itemTexts.length === 0){
+        if (itemTexts.length === 0) {
             itemTexts.push(itemText);
         }
         itemTexts.forEach(item => {
-            this.todoList.set(++this.lastId,{value:item, done: false});
+            ++this.lastID
+            this.todoList[this.lastID] = { value: item, done: false, id: this.lastID };
         })
         this.store();
     }
 
     removeTask(id) {
-        this.todoList.delete(id);
+        delete this.todoList[id];
         this.store();
     }
 
-    setDone(id){
+    setDone(id) {
         this.todoList[id].done = true;
     }
 
-    setUnDone(id){
+    setUnDone(id) {
         this.todoList[id].done = false;
     }
 
-    
-    get doneTasks(){
-       return this.todoList.filter(item => item.done).length;
+    get doneTasks() {
+        return this.todoList.values().filter(item => item.done).length;
     }
 
-
-    clear(){
-        this.todoList = new Map;
+    clear() {
+        this.todoList = {};
         this.store();
     }
 }
