@@ -1,19 +1,19 @@
-import axios from 'axios'
+import axios from 'axios';
 
-class PokemonClient{
+class PokemonClient {
     constructor() {
         this.targetURL = 'https://pokeapi.co/api/v2/pokemon/';
     }
 
-    async fetchPokemon(idArray){
+    async fetchPokemon(idArray) {
         let requests = [];
         idArray.forEach(id => {
             requests.push(
                 axios.get(this.targetURL + `${id}`)
-                .then(res => res.data)
-                .catch(err => new Promise((resolve) => {
-                    resolve({id: id});
-            })))
+                    .then(res => res.data)
+                    .catch(err => new Promise((resolve) => {
+                        resolve({ id: id });
+                    })))
         });
         const responses = await Promise.all(requests);
         return responses.map(pokemon => {

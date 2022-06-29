@@ -1,36 +1,37 @@
 import app from './server.js';
 import bodyParser from 'body-parser';
-import ItemManager from './ItemManager.js';
+import ItemManager from './item-manager.js';
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 const itemManager = new ItemManager();
 
-app.post("/add", (req,res) => {
-   itemManager.addTask(req.body.title)
-   .then(() => res.json(itemManager.getItems()))
- });
-
- app.get("/get", (req, res) => {
-   res.status(200).json(itemManager.getItems());
+app.post("/add", async (req, res) => {
+  await itemManager.addTask(req.body.itemName);
+  res.status(200).json({});
 });
 
-app.patch('/done/:id', (req, res) => {
-   itemManager.setDone(req.params.id);
-   res.json(itemManager.getItems());
- });
+app.get("/get", async (req, res) => {
+  res.status(200).json(await itemManager.getItems());
+});
 
- app.patch('/undone/:id', (req, res) => {
-   itemManager.setUnDone(req.params.id);
-   res.json(itemManager.getItems());
- });
+app.patch('/:id/done', async (req, res) => {
+  await itemManager.setDone(req.params.id);
+  res.json({});
+});
 
- app.delete('/delete/:id', (req, res) => {
-   itemManager.removeTask(req.params.id);
-   res.json(itemManager.getItems());
- });
+app.patch('/:id/undone', async (req, res) => {
+  await itemManager.setUnDone(req.params.id);
+  res.json({});
+});
 
- app.delete('/delete_all_items', (req, res) => {
-   itemManager.clear();
-   res.json(itemManager.getItems());
- });
+app.delete('/:id/delete', async (req, res) => {
+  await itemManager.removeTask(req.params.id);
+  res.json({});
+});
+
+app.delete('/delete_all_items', async (req, res) => {
+  itemManager.clear();
+  res.json({});
+});
