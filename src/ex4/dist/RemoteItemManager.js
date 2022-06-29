@@ -10,9 +10,9 @@ class RemoteItemManager{
             'Content-Type': 'application/json'
           },
         method: "POST",
-        body: JSON.stringify({title:text})
+        body: JSON.stringify({itemName:text})
        })
-       await response.json();
+        await response.json();
     }
 
     async get(){
@@ -26,7 +26,6 @@ class RemoteItemManager{
             method: "PATCH",
            })
             await response.json();
-
     }
 
     async setUnDone(id){

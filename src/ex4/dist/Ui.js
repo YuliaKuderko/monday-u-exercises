@@ -26,13 +26,13 @@ class Ui {
         const items = await this.RemoteItemManager.get();
         items.forEach(element => {
             const li = document.createElement('li'); 
-            if (element.done) {
+            if (element.status) {
                 li.style.textDecoration = 'line-through';
                 li.style.color = 'lightgrey';
             }
             li.innerHTML = `
-            <input type="checkbox" ${element.done ? 'checked' : ''} name="task-complete" class="doneCheckbox" id="${element.id}"> 
-            <span class="task-item">${element.value}</span> 
+            <input type="checkbox" ${element.status ? 'checked' : ''} name="task-complete" class="doneCheckbox" id="${element.id}"> 
+            <span class="task-item">${element.ItemName}</span> 
             <button id="deleteButton" item=${element.id} name="deleteButton"><i class="fas fa-trash"></i></button>`;
             li.classList.add('task-list-item'); 
             ul.appendChild(li);
@@ -76,7 +76,7 @@ class Ui {
 
 
     taskCompletePhrase(items) {
-        this.tasksCompleted.innerText = `You have completed ${items.filter(e => e.done).length} / ${items.length} tasks`;
+        this.tasksCompleted.innerText = `You have completed ${items.filter(e => e.status).length} / ${items.length} tasks`;
     }
 
     duplicateListItemRemover(ul) {

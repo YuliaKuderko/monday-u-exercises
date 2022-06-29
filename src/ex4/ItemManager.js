@@ -1,30 +1,20 @@
 import PokemonClient from "./PokemonClient.js";
-import fs from 'fs';
-const filename = './data.json';
+import Sequelize, { where }  from 'sequelize';
+import Config from './server/db/config/config.json' assert {type: "json"};
+import Item from "./server/db/models/item.js";
 
 class ItemManager {
     constructor(element) {
-        this.load();
+        const seq = new Sequelize(Config["development"]);
+        Item.init(seq);
         this.PokemonClient = new PokemonClient();
     }
 
-    load() {
-        const data = fs.readFileSync(filename, { encoding: 'utf8', flag: 'r' });
-        this.todoList = JSON.parse(data);
-        if (this.todoList.length === 0) {
-            this.lastID = 0;
-            return;
-        }
-        this.lastID = Math.max(...Object.keys(this.todoList), 0);
+
+    async getItems() {
+       return await Item.findAll();
     }
 
-    store() {
-        fs.writeFileSync(filename, JSON.stringify(this.todoList));
-    }
-
-    getItems() {
-        return this.todoList;
-    }
     async addTask(itemText) {
         let itemTexts = [];
         const split = itemText.split(`,`);
@@ -37,28 +27,37 @@ class ItemManager {
         if (itemTexts.length === 0) {
             itemTexts.push(itemText);
         }
-        itemTexts.forEach(item => {
-            ++this.lastID
-            this.todoList[this.lastID] = { value: item, done: false, id: this.lastID };
-        })
-        this.store();
+        let inputs = [];
+        for(const item of itemTexts){
+            inputs.push(await Item.create({ ItemName: item, status: false }));
+        }
+        await Promise.all(inputs);
     }
-    removeTask(id) {
-        delete this.todoList[id];
-        this.store();
+
+    async removeTask(id) {
+       const item = await Item.findByPk(id);
+       await item.destroy({where: {id: Item.id}});
     }
-    setDone(id) {
-        this.todoList[id].done = true;
+
+    async setDone(id) {
+        const item = await Item.findByPk(id);
+        await Item.update({status: true}, {where: {id: item.id}});
     }
-    setUnDone(id) {
-        this.todoList[id].done = false;
+
+    async setUnDone(id) {
+        const item = await Item.findByPk(id);
+       await Item.update({status: false}, {where: {id: item.id}});
     }
+
     get doneTasks() {
-        return this.todoList.values().filter(item => item.done).length;
+        return Item.findAll().filter(item => item.status).length;
     }
+
     clear() {
-        this.todoList = {};
-        this.store();
+        Item.destroy({
+            where: {},
+            truncate: true
+          });
     }
 }
 export default ItemManager;
