@@ -1,5 +1,5 @@
-import PokemonClient from "./PokemonClient.js";
-import Sequelize, { where }  from 'sequelize';
+import PokemonClient from "./pokemon-client.js";
+import Sequelize, { where } from 'sequelize';
 import Config from './server/db/config/config.json' assert {type: "json"};
 import Item from "./server/db/models/item.js";
 
@@ -12,7 +12,7 @@ class ItemManager {
 
 
     async getItems() {
-       return await Item.findAll();
+        return await Item.findAll();
     }
 
     async addTask(itemText) {
@@ -28,25 +28,25 @@ class ItemManager {
             itemTexts.push(itemText);
         }
         let inputs = [];
-        for(const item of itemTexts){
+        for (const item of itemTexts) {
             inputs.push(await Item.create({ ItemName: item, status: false }));
         }
         await Promise.all(inputs);
     }
 
     async removeTask(id) {
-       const item = await Item.findByPk(id);
-       await item.destroy({where: {id: Item.id}});
+        const item = await Item.findByPk(id);
+        await item.destroy({ where: { id: Item.id } });
     }
 
     async setDone(id) {
         const item = await Item.findByPk(id);
-        await Item.update({status: true}, {where: {id: item.id}});
+        await Item.update({ status: true }, { where: { id: item.id } });
     }
 
     async setUnDone(id) {
         const item = await Item.findByPk(id);
-       await Item.update({status: false}, {where: {id: item.id}});
+        await Item.update({ status: false }, { where: { id: item.id } });
     }
 
     get doneTasks() {
@@ -57,7 +57,7 @@ class ItemManager {
         Item.destroy({
             where: {},
             truncate: true
-          });
+        });
     }
 }
 export default ItemManager;

@@ -10,12 +10,12 @@ class Ui {
     }
 
     async submitButtonHandler(event) {
-        event.preventDefault(); 
+        event.preventDefault();
         const newTaskInput = document.querySelector('#new-task');
         if (newTaskInput.value !== '') {
             this.tasksCompleted.style.display = "flex";
             await this.RemoteItemManager.add(newTaskInput.value);
-            newTaskInput.value = ''; 
+            newTaskInput.value = '';
         }
         this.renderTodo();
     }
@@ -25,7 +25,7 @@ class Ui {
         this.duplicateListItemRemover(ul);
         const items = await this.RemoteItemManager.get();
         items.forEach(element => {
-            const li = document.createElement('li'); 
+            const li = document.createElement('li');
             if (element.status) {
                 li.style.textDecoration = 'line-through';
                 li.style.color = 'lightgrey';
@@ -34,7 +34,7 @@ class Ui {
             <input type="checkbox" ${element.status ? 'checked' : ''} name="task-complete" class="doneCheckbox" id="${element.id}"> 
             <span class="task-item">${element.ItemName}</span> 
             <button id="deleteButton" item=${element.id} name="deleteButton"><i class="fas fa-trash"></i></button>`;
-            li.classList.add('task-list-item'); 
+            li.classList.add('task-list-item');
             ul.appendChild(li);
             document.getElementById(element.id).addEventListener('click', this.checkTodo.bind(this));
             document.querySelector(`[item="${element.id}"]`).addEventListener('click', this.deleteTodo.bind(this));
