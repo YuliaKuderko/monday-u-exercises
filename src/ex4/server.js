@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors"
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -7,6 +8,7 @@ const port = 8080;
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 app.use(express.static(__dirname + '\\dist'));
+app.use(cors())
 
 app.get('', (req, res) =>{
     res.sendFile(__dirname + '\\index.html');

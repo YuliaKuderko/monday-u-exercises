@@ -49,8 +49,8 @@ class ItemManager {
         await Item.update({ status: false }, { where: { id: item.id } });
     }
 
-    get doneTasks() {
-        return Item.findAll().filter(item => item.status).length;
+    async doneTasks() {
+        return await Item.findAll().filter(item => item.status).length;
     }
 
     clear() {
