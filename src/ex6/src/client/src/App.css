@@ -10,9 +10,8 @@ body{
 .container{
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    max-width: 60rem;
+    max-width: 50rem;
     margin: 0 auto;
     padding: 30px;
     margin-top: 30px;
@@ -34,36 +33,38 @@ header{
     font-family: 'Dancing Script', sans-serif;
 }
 
-.new-task-container{
+form{
+    padding: 3px;
+    margin-bottom: 30px;
+    display: flex;
+}
+
+.all-task-container{
+    display: flex;
+    flex-direction: column;
     width: 60%;
 }
 
-form{
-    padding: 15px;
-    display: flex;
-    width: 100%;
-}
-
-#new-task{
+.new-task{
     font-family: 'Raleway', sans-serif;
     color: rgb(232, 150, 150);
     font-weight: bold;
     padding: 10px;
     font-size: 23px;
     text-transform: capitalize;
-    flex-grow: 1;
     border-radius: 5px;
     outline-color: rgb(215, 215, 215);
     outline-style: double;
     border: none;
+    width: 100%;
 }
 
-#new-task::placeholder{
+.new-task::placeholder{
     text-align: center;
     color: lightgrey;
 }
 
-#new-task:focus{
+.new-task:focus{
     border-color:rgb(232, 150, 150);
     border: none;
     outline: none;
@@ -72,7 +73,7 @@ form{
     border-radius: 5px;
 }
 
-#submitButton{
+.submitButton{
    width: 50px;
    font-size: 30px;
    height: 50px;
@@ -84,12 +85,12 @@ form{
    color: white;
 }
 
-#submitButton:hover{
+.submitButton:hover{
     background-color: rgb(225, 127, 127);
     cursor: pointer;
 }
 
-#deleteButton{
+.deleteButton{
     width: 50px;
     font-size: 23px;
     border: none;
@@ -100,33 +101,16 @@ form{
     border-radius: 5px;
 }
 
-#deleteButton:hover{
+.deleteButton:hover{
     background-color: rgb(210, 210, 210);
     cursor: pointer;
 }
 
-.tasks-container{
-    margin-left: 20px;
-}
 
-.task-item{
-    flex-grow: 1;
-}
-
-ul{
-    padding-left: 0px;
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin-top: 30px;
-}
-
-li{
+.li{
+    justify-content: space-between;
     display: flex;
     align-items: center;
-    width: 95%;
     border-bottom: 1px solid lightgrey;
     font-size: 15px;
     color: grey;
@@ -136,17 +120,37 @@ li{
     font-family: 'Raleway', sans-serif;
     font-size: 30px;
     margin-bottom: 10px;
+    margin-top: 10px;
 }
 
-li:hover{
+.li_done{
+    justify-content: space-between;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid lightgrey;
+    font-size: 15px;
+    color: lightgrey;
+    box-shadow: 2px 1px 5px 5px rgba(195, 195, 195, 0.3);
+    border-radius: 10px;
+    padding: 10px;
+    font-family: 'Raleway', sans-serif;
+    font-size: 30px;
+    margin-bottom: 10px;
+    text-decoration: line-through;
+}
+
+.li:hover{
     cursor: pointer;
     box-shadow: 0 12px 22px 0 rgba(232, 150, 150, 0.302);
     background: whitesmoke;
 }
 
-i{
-    pointer-events: none;
+.li_done:hover{
+    cursor: pointer;
+    box-shadow: 0 12px 22px 0 rgba(232, 150, 150, 0.302);
+    background: whitesmoke;
 }
+
 
 img{
     margin: 0 auto;

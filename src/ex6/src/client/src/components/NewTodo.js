@@ -1,13 +1,12 @@
-// import { format } from 'mysql2';
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from "prop-types";
 import {AiFillPlusSquare} from 'react-icons/ai';
-import RemoteItemManager from '../remote-item-manager';
+import RemoteItemManager from '../remote-item-manager.js';
 
 
-
-function NewTodo({onAdd}) {
+function NewTodo({fetchTodos}) {
     const [input, setInput] = useState('');
+    const remoteItemManager = new RemoteItemManager();
 
     const inputRef = useRef(null);
 
@@ -19,10 +18,11 @@ function NewTodo({onAdd}) {
       setInput(e.target.value);
     }
     
-    const handleSubmit = e => {
+    const handleSubmit =  async (e) => {
       e.preventDefault();
       setInput('');
-      onAdd(input);
+      await remoteItemManager.add(input);
+      fetchTodos();
     }
 
   return (
@@ -35,7 +35,7 @@ function NewTodo({onAdd}) {
 }
 
 NewTodo.propTypes = {
-  onAdd: PropTypes.func
+  fetchTodos: PropTypes.func
 };
 
 export default NewTodo;
