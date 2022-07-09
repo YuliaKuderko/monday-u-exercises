@@ -18,7 +18,7 @@ class RemoteItemManager {
     async get() {
         const response = await fetch(this.targetURL + `get`);
         const data = await response.json();
-        return Object.values(data);
+        return data;
     }
 
     async setDone(id) {
@@ -49,4 +49,6 @@ class RemoteItemManager {
         await response.json();
     }
 }
+
+export default RemoteItemManager;
 
