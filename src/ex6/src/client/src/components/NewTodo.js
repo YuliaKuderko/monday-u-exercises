@@ -27,8 +27,7 @@ function NewTodo({fetchTodos}) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <input className='new-task' type="text" placeholder="Add your new todo" 
-       value={input} name="text" onChange={handleChange} ref={inputRef} required/>
+      <input className='new-task' type="text" placeholder="Add your new todo" value={input} name="text" onChange={handleChange} ref={inputRef} required/>
       <button className='submitButton' type="submit" ><AiFillPlusSquare/></button>
     </form>    
   )

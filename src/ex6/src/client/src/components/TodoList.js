@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import NewTodo from './NewTodo';
 import RemoteItemManager from '../remote-item-manager.js';
 import TodoItem from './TodoItem';
-import logo from './list_gif.gif'
+import logo from './list_gif.gif';
 
 function TodoList() {
     const [todos, setTodos] = useState([]);
