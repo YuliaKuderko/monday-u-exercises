@@ -1,48 +1,44 @@
 import React from 'react';
 import { FaTrash } from 'react-icons/fa';
 import PropTypes from "prop-types";
-import RemoteItemManager from '../remote-item-manager.js';
+import {connect} from 'react-redux';
+import { deleteTodo, doneTodo, undoneTodo } from '../redux/actions/items-entities-actions.js';
 
-function TodoItem({ todos, fetchTodos }) {
-    const remoteItemManager = new RemoteItemManager();
-    
+function TodoItem({ todos, deleteTodo, doneTodo, undoneTodo }) {
     const alertMessage = (event) => {
         if ( event.target.className !== 'deleteButton' && event.target.className !== 'doneCheckbox') {
             alert(event.target.innerText);
         }
     }
-    
-    const doneTodo = async (id) => {
-        await remoteItemManager.setDone(id);
-        fetchTodos();
-    }
-
-    const unDoneTodo = async (id) => {
-        await remoteItemManager.setUnDone(id);
-        fetchTodos();
-    }
-
-    const removeTodo = async (id) => {
-        await remoteItemManager.deleteItem(id);
-        fetchTodos();
-    }
 
     return todos.map((todo, index) => (
         <div className={todo.status ? 'li_done' : 'li'} key={index}>
                <div key={todo.id} onClick={alertMessage} id="task-list-item">
-                <input type="checkbox" onClick={() => todo.status ? unDoneTodo(todo.id) : doneTodo(todo.id)} checked={todo.status ? 'checked' : ''} className='doneCheckbox' />
+                <input type="checkbox" onClick={() => todo.status ? undoneTodo(todo.id) : doneTodo(todo.id)} checked={todo.status ? 'checked' : ''} className='doneCheckbox' />
                 {todo.ItemName}
             </div> 
-            <FaTrash onClick={() => removeTodo(todo.id)} className="deleteButton" />
+            <FaTrash onClick={() => deleteTodo(todo.id)} className="deleteButton" />
         </div>
     ))
 }
 
 TodoItem.propTypes = {
     todos: PropTypes.array,
-    fetchTodos: PropTypes.func,
+    deleteTodo: PropTypes.func,
 };
 
-export default TodoItem;
+const mapStateToProps = (state) => {
+    return {
+      todos: state.itemsEntities.todos,
+    };
+  };
+  
+  const mapDispatchToProps = (dispatch) => ({
+    doneTodo: (id) => dispatch(doneTodo(id)),
+    undoneTodo: (id) => dispatch(undoneTodo(id)),
+    deleteTodo: (todo) => dispatch(deleteTodo(todo)),
+  });
+  
+  export default connect(mapStateToProps, mapDispatchToProps)(TodoItem);
 
 

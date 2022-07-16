@@ -1,40 +1,39 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from "prop-types";
-import {AiFillPlusSquare} from 'react-icons/ai';
-import RemoteItemManager from '../remote-item-manager.js';
+import { AiFillPlusSquare } from 'react-icons/ai';
+import { connect } from 'react-redux';
+import { addTodo } from '../redux/actions/items-entities-actions';
 
+function NewTodo(props) {
 
-function NewTodo({fetchTodos}) {
-    const [input, setInput] = useState('');
-    const remoteItemManager = new RemoteItemManager();
+  const [input, setInput] = useState('');
+  const inputRef = useRef(null);
 
-    const inputRef = useRef(null);
+  useEffect(() => {
+    inputRef.current.focus();
+  })
 
-    useEffect(() => {
-      inputRef.current.focus();
-    })
+  const handleChange = e => {
+    setInput(e.target.value);
+  }
 
-    const handleChange = e => {
-      setInput(e.target.value);
-    }
-    
-    const handleSubmit =  async (e) => {
-      e.preventDefault();
-      setInput('');
-      await remoteItemManager.add(input);
-      fetchTodos();
-    }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    props.addTodo(input)
+    setInput('');
+  }
 
   return (
     <form onSubmit={handleSubmit}>
-      <input className='new-task' type="text" placeholder="Add your new todo" value={input} name="text" onChange={handleChange} ref={inputRef} required/>
-      <button className='submitButton' type="submit" ><AiFillPlusSquare/></button>
-    </form>    
+      <input className='new-task' type="text" placeholder="Add your new todo" value={input} name="text" onChange={handleChange} ref={inputRef} required />
+      <button className='submitButton' type="submit" ><AiFillPlusSquare /></button>
+    </form>
   )
 }
 
-NewTodo.propTypes = {
-  fetchTodos: PropTypes.func
-};
 
-export default NewTodo;
+
+const mapDispatchToProps = (dispatch) => ({
+  addTodo: input => dispatch(addTodo(input))
+})
+export default connect(null, mapDispatchToProps)(NewTodo);
