@@ -4,49 +4,73 @@ class RemoteItemManager {
     }
 
     async add(text) {
-        const response = await fetch(this.targetURL + `add`, {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            method: "POST",
-            body: JSON.stringify({ itemName: text })
-        })
-        await response.json();
+        try {
+            const response = await fetch(this.targetURL + `add`, {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                method: "POST",
+                body: JSON.stringify({ itemName: text })
+            })
+            await response.json();
+        } catch (e) {
+            throw e;
+        }
     }
 
     async get() {
-        const response = await fetch(this.targetURL + `get`);
-        const data = await response.json();
-        return data;
+        try {
+            const response = await fetch(this.targetURL + `get`);
+            const data = await response.json();
+            return data;
+        } catch (e) {
+            throw e;
+        }
     }
 
     async setDone(id) {
-        const response = await fetch(this.targetURL + `${id}/done`, {
-            method: "PATCH",
-        })
-        await response.json();
+        try {
+            const response = await fetch(this.targetURL + `${id}/done`, {
+                method: "PATCH",
+            })
+            await response.json();
+        } catch (e) {
+            throw e;
+        }
     }
 
     async setUnDone(id) {
-        const response = await fetch(this.targetURL + `${id}/undone`, {
-            method: "PATCH",
-        })
-        await response.json();
+        try {
+            const response = await fetch(this.targetURL + `${id}/undone`, {
+                method: "PATCH",
+            })
+            await response.json();
+        } catch (e) {
+            throw e;
+        }
     }
 
     async deleteItem(id) {
-        const response = await fetch(this.targetURL + `${id}/delete`, {
-            method: "DELETE",
-        })
-        await response.json();
+        try {
+            const response = await fetch(this.targetURL + `${id}/delete`, {
+                method: "DELETE",
+            })
+            await response.json();
+        } catch (e) {
+            throw e;
+        }
     }
 
     async clearAll(array) {
-        const response = await fetch(this.targetURL + `delete_all_items`, {
-            method: "DELETE",
-        })
-        await response.json();
+        try {
+            const response = await fetch(this.targetURL + `delete_all_items`, {
+                method: "DELETE",
+            })
+            await response.json();
+        } catch (e) {
+            throw e;
+        }
     }
 }
 

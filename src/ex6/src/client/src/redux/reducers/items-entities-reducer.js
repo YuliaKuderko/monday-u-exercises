@@ -1,5 +1,5 @@
 const initialState = {
-  todos: []
+  todos: [],
 };
 
 const itemsEntitiesReducer = (state = initialState, action) => {
@@ -20,20 +20,18 @@ const itemsEntitiesReducer = (state = initialState, action) => {
       return { ...state, todos: [] };
 
     case "DONE_TODOS":
-      return {
-        ...state, todos: state.todos.map((todo) => {
+      return {...state, todos: state.todos.map((todo) => {
           if (todo.id === action.payload) {
-            todo.status = true
+            todo.status = true;
           }
           return todo;
         })
       };
 
     case "UNDONE_TODOS":
-      return {
-        ...state, todos: state.todos.map((todo) => {
+      return {...state, todos: state.todos.map((todo) => {
           if (todo.id === action.payload) {
-            todo.status = false
+            todo.status = false;
           }
           return todo;
         })
